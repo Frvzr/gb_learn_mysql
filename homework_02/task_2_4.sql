@@ -1,4 +1,10 @@
-*/ mysqldump -u root -p --where="true limit 100" mysql help_keyword > dump_hk.sql */
+/*
+ * (по желанию) Ознакомьтесь более подробно с документацией утилиты mysqldump. 
+ * Создайте дамп единственной таблицы help_keyword базы данных mysql. 
+ * Причем добейтесь того, чтобы дамп содержал только первые 100 строк таблицы.
+ */ 
+
+/* mysqldump -u root -p --where="true limit 100" mysql help_keyword > dump_hk.sql */
 
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --

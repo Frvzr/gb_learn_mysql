@@ -6,5 +6,5 @@ DROP DATABASE IF EXISTS example;
 CREATE DATABASE example;
 DROP TABLE IF EXISTS example.users;
 CREATE TABLE example.users (
-	id int,
-	name char(200))
+	id INT PRIMARY KEY,
+	name VARCHAR(255))

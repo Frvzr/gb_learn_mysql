@@ -52,6 +52,38 @@ VALUES
 	(NULL, 3, 'Комплекты клавиатуры + мышь'),
 	(NULL, 3, 'Коврики для мыши');
 
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+	`id` SERIAL PRIMARY KEY,
+	`categories_id` BIGINT(20) unsigned NOT NULL,
+  	`name` VARCHAR(255) COMMENT 'Название',
+  	`description` TEXT COMMENT 'Описание',
+  	`price` DECIMAL (11,2) COMMENT 'Цена',
+  	`quantity` BIGINT(20) COMMENT 'Количество',
+  	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  	FOREIGN KEY (`categories_id`) REFERENCES `categories`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) COMMENT = 'Товар';
+
+INSERT INTO 
+	products 
+VALUES 
+	(NULL, 1, 'ПК DEXP Aquilon O263', 'Intel Celeron G4900, 2x3.1 ГГц, 4 ГБ DDR4, SSD 120 ГБ, без ОС', 13999, 1),
+	(NULL, 1, 'Мини ПК Acer Revo RN96 [DQ.BFSER.006 ]', 'Intel Core i3-1115G4, 2x3 ГГц, 4 ГБ DDR4, SSD 256 ГБ, без ОС', 29999, 3),
+	(NULL, 1, 'ПК DEXP Aquilon O268', 'Intel Pentium Gold G6405, 2x4.1 ГГц, 8 ГБ DDR4, SSD 240 ГБ, Windows 11 Home Single Language', 25999, 4),
+	(NULL, 1, 'Мини ПК MSI Cubi 5 10M-246XRU [9S6-B18311-246]', 'Intel Pentium Gold 6405U, 2x2.4 ГГц, 4 ГБ DDR4, SSD 128 ГБ, без ОС', 22999, 1),
+	(NULL, 2, '15.6" Ноутбук ASUS ROG Strix SCAR 15 G533ZX-LN087W черный', 'Quad HD 2K (2560x1440), IPS, Intel Core i9-12900H, ядра: 6 + 8 х 2.5 ГГц, RAM 32 ГБ, SSD 1000 ГБ, GeForce RTX 3080 Ti для ноутбуков 16 ГБ, Windows 11 Home Single Language', 443999, 1)
+	(NULL, 2, '11.6" Ноутбук ASUS Laptop L210MA-GJ164T белый', 'HD (1366x768), TN+film, Intel Celeron N4020, ядра: 2 х 1.1 ГГц, RAM 4 ГБ, eMMC 128 ГБ, Intel UHD Graphics 600 , Windows 10 Home Single Language', 20999, 0)
+	(NULL, 2, '11.6" Ноутбук ASUS Laptop E210MA-GJ003T белый', 'HD (1366x768), TN+film, Intel Celeron N4020, ядра: 2 х 1.1 ГГц, RAM 4 ГБ, eMMC 64 ГБ, Intel UHD Graphics 600 , Windows 10 Home Single Language', 19999, 1);
+
+DROP TABLE IF EXISTS `media_types`;
+CREATE TABLE `media_types` (
+  `id` SERIAL PRIMARY KEY,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  );
+
 DROP TABLE IF EXISTS `media`;
 CREATE TABLE `media` (
   `id` bigint(20) PRIMARY KEY,
@@ -64,33 +96,6 @@ CREATE TABLE `media` (
   KEY `media_type_id` (`media_type_id`),
   CONSTRAINT `media_ibfk_2` FOREIGN KEY (`media_type_id`) REFERENCES `media_types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 );
-
-DROP TABLE IF EXISTS `media_types`;
-CREATE TABLE `media_types` (
-  `id` bigint(20) SERIAL PRIMARY KEY,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  );
-
-DROP TABLE IF EXISTS products;
-CREATE TABLE products (
-	`id` SERIAL PRIMARY KEY,
-	`categories_id` BIGINT(20) unsigned NOT NULL,
-  	`name` VARCHAR(255) COMMENT 'Название',
-  	`description` TEXT COMMENT 'Описание',
-  	`price` DECIMAL (11,2) COMMENT 'Цена',
-  	`quantity` BIGINT(20) COMMENT 'Количество',
-  	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  	
-  	FOREIGN KEY (`categories_id`) REFERENCES `categories`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) COMMENT = 'Товар';
-
-INSERT INTO 
-	products 
-VALUES 
-	();
 
 DROP TABLE IF EXISTS country;
 CREATE TABLE country(

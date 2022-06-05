@@ -45,7 +45,6 @@ CREATE OR REPLACE VIEW pr_name(product_name, catalog_name) AS SELECT pr.name, ct
 */
 
 
-
 /*
 4. (по желанию) Пусть имеется любая таблица с календарным полем created_at. 
 Создайте запрос, который удаляет устаревшие записи из таблицы, оставляя только 5 самых свежих записей.
@@ -131,18 +130,24 @@ DELIMITER //
 CREATE TRIGGER not_null BEFORE INSERT ON products
 FOR EACH ROW 
 BEGIN
-	DECLARE name_ VARCHAR(255);
-	SELECT name INTO name_ FROM products ORDER BY name LIMIT 1;
-	SET NEW.name = COALESCE(NEW.name, name_);
+	IF(ISNULL(NEW.name) AND ISNULL(NEW.description)) THEN 
+		 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cancel insert! NULL in both fields!';
+	ELSEIF (ISNULL(NEW.description)) THEN 
+		SET NEW.description = 'No description';
+	ELSEIF (ISNULL(NEW.name)) THEN 
+		SET NEW.name = 'No name';
+	END IF;
 END//
 
-SELECT name, description FROM products;
-INSERT INTO products (id, description, price, catalog_id) VALUES ()
-
-
+DELIMITER ;
+INSERT INTO products (id, name, description, price, catalog_id) VALUES (NULL, NULL, 'Материнская плата MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 15000, 2);
+INSERT INTO products (id, name, description, price, catalog_id) VALUES (NULL, NULL, NULL, 15000, 2);
+INSERT INTO products (id, name, description, price, catalog_id) VALUES (NULL, 'AMD', NULL, 15000, 2);
+SELECT id, name, description FROM products;
 /*
  3. (по желанию) Напишите хранимую функцию для вычисления произвольного числа Фибоначчи. 
  Числами Фибоначчи называется последовательность в которой число равно сумме двух предыдущих чисел. 
  Вызов функции FIBONACCI(10) должен возвращать число 55.
  */
+
 

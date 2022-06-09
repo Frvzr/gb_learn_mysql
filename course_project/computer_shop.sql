@@ -124,7 +124,6 @@ VALUES
 	(22, 3, 'Комплекты клавиатуры + мышь', 25),
 	(23, 3, 'Коврики для мыши', 26);
 
-
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
 	`id` SERIAL PRIMARY KEY,
@@ -208,7 +207,6 @@ CREATE TABLE main_characteristics (
 	`brand_id` bigint unsigned NOT NULL,
 	`country_id` bigint unsigned NOT NULL,
 	
-
 	FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (`country_id`) REFERENCES `country`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`) ON UPDATE CASCADE ON DELETE CASCADE

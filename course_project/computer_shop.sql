@@ -57,9 +57,18 @@ VALUES
 	(23, 1, 'Клавиатуры', 'key.jpg', 45687, '2018-12-23 16:31:43', now()),
 	(24, 1, 'Мыши', 'mouse.jpg', 45687, '2018-12-23 16:31:43', now()),
 	(25, 1, 'Комплекты клавиатуры + мышь', 'key_mouse.jpg', 45687, '2018-12-23 16:31:43', now()),
-	(26, 1, 'Коврики для мыши', 'mouse_pads.jpg', 45687, '2018-12-23 16:31:43', now());
-
-
+	(26, 1, 'Коврики для мыши', 'mouse_pads.jpg', 45687, '2018-12-23 16:31:43', now()),
+	(27, 1, 'avatar', 'photo1.jpg', 12345, '2020-12-23 19:41:32', now()),
+	(28, 1, 'avatar', 'photo2.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(29, 1, 'avatar', 'photo3.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(30, 1, 'avatar', 'photo4.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(31, 1, 'avatar', 'photo5.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(32, 1, 'avatar', 'photo6.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(33, 1, 'avatar', 'photo7.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(34, 1, 'avatar', 'photo8.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(35, 1, 'avatar', 'photo9.jpg', 12335, '2020-12-23 19:41:32', now()),
+	(36, 1, 'avatar', 'photo10.jpg', 12335, '2020-12-23 19:41:32', now());
+	
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs (
  	`id` SERIAL PRIMARY KEY,
@@ -239,6 +248,20 @@ CREATE TABLE users (
     INDEX users_firstname_lastname_idx(`firstname`, `lastname`)
 ) COMMENT = 'Пользователи';
 
+INSERT INTO 
+	users 
+VALUES 
+(1, 'Ivan', 'Ivanov', 'iivanov@mmail.ru', '12342df133sdsdff242', '+79129129129', 0),
+(2, 'Petr', 'Ivanov', 'pivanov@mmail.ru', '12342df133sdsdff2ffgh2', '+79129129128', 0),
+(3, 'Olga', 'Ivanova', 'oivanova@mmail.ru', '12342df133sdssaaaf2ffgh2', '+79129129127', 0),
+(4, 'Alexey', 'Petrov', 'apetrov@mmail.ru', '12342df133shhhhaaaf2ffgh2', '+79129239127', 0),
+(5, 'John', 'Smith', 'jsmith@mmail.ru', '12342df133shhhhaaaf2ffgh2', '+79129249127', 0),
+(6, 'Megan', 'Fox', 'mfox@mmail.ru', '123rtydf133shhhhaaaf2ffgh2', '+79129349127', 0),
+(7, 'Cristiano', 'Ronaldo', 'cronaldo@mmail.ru', 'tyr3rtydf133shhhhaaaf2ffgh2', '+79229349127', 0),
+(8, 'Elena', 'Petrova', 'eptrova@mmail.ru', 'tghjgh33shhhhaaaf2ffgh2', '+79229349907', 0),
+(9, 'Adam', 'Sendler', 'asendler@mmail.ru', 'tghjghklfhaaaf2ffgh2', '+79229359907', 0),
+(10, 'Pina', 'Colada', 'pcolada@mmail.ru', 'tg546533shhhhaaaf2ffgh2', '+79329349907', 0);
+
 DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
 	`user_id` SERIAL PRIMARY KEY,
@@ -249,6 +272,58 @@ CREATE TABLE `profiles` (
     `hometown` VARCHAR(100),
     
     FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (`photo_id`) REFERENCES media(`id`)  
+    FOREIGN KEY (`photo_id`) REFERENCES media(`id`) ON UPDATE CASCADE ON DELETE CASCADE 
 );
 
+INSERT INTO 
+	profiles
+VALUES 
+(1, 'm', '2000-01-20', 27, '2020-12-23 19:41:32', 'Tyumen'),
+(2, 'm', '2001-03-13', 28, '2020-12-23 19:41:32', 'Moscow'),
+(3, 'f', '1988-02-13', 29, '2020-12-23 19:41:32', 'Ekaterinburg'),
+(4, 'm', '1995-08-24', 30, '2020-12-23 19:41:32', 'Sochi'),
+(5, 'm', '1971-05-13', 31, '2020-12-23 19:41:32', 'New-York'),
+(6, 'f', '1999-07-11', 32, '2020-12-23 19:41:32', 'New-York'),
+(7, 'm', '1989-11-29', 33, '2020-12-23 19:41:32', 'Manchester'),
+(8, 'f', '1995-01-11', 34, '2020-12-23 19:41:32', 'Omsk'),
+(9, 'm', '1984-02-13', 35, '2020-12-23 19:41:32', 'New-York'),
+(10, 'f', '2009-02-13', 36, '2020-12-23 19:41:32', 'Moscow');
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,
+  user_id bigint UNSIGNED,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON UPDATE CASCADE ON DELETE CASCADE 
+);
+
+INSERT INTO 
+	orders 
+VALUES 
+	(1, 2, now(), now()),
+	(2, 1, now(), now()),
+	(3, 9, now(), now()),
+	(4, 5, now(), now());
+
+DROP TABLE IF EXISTS orders_products;
+CREATE TABLE orders_products (
+  id SERIAL PRIMARY KEY,
+  order_id bigint UNSIGNED,
+  product_id bigint UNSIGNED,
+  total INT UNSIGNED DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  FOREIGN KEY (`order_id`) REFERENCES orders(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (`product_id`) REFERENCES products(`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO 
+	orders_products
+VALUES 
+	(1, 1, 3, 1, now(), now()),
+	(2, 1, 17, 1, now(),now()),
+	(3, 2, 15, 1, now(), now()),
+	(4, 3, 12, 1, now(), now()),
+	(5, 4, 11, 2, now(), now());

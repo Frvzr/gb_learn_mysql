@@ -11,10 +11,10 @@ FROM messages m
 JOIN users u ON u.id = m.from_user_id
 JOIN friend_requests fr 
 ON 
-	((fr.initiator_user_id = m.from_user_id AND fr.target_user_id = m.to_user_id AND status = 'approved') 
+	((fr.initiator_user_id = m.from_user_id AND fr.target_user_id = m.to_user_id) 
 OR 
-	(fr.target_user_id = m.from_user_id AND fr.initiator_user_id = m.to_user_id AND status = 'approved'))
-WHERE to_user_id = 1
+	(fr.target_user_id = m.from_user_id AND fr.initiator_user_id = m.to_user_id))
+WHERE to_user_id = 1 AND status = 'approved'
 GROUP BY m.from_user_id
 ORDER BY total_messages DESC
 LIMIT 1;

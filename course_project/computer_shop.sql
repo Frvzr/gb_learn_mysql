@@ -83,22 +83,23 @@ INSERT INTO
 VALUES 
 	(1, 'Компьютеры, ноутбуки и ПО', 1),
 	(2, 'Комплектующие для ПК', 2),
-	(3, 'Переферия и устройства', 3);
-	
+	(3, 'Переферия и устройства', 3),
+	(4, 'No name', 3);
+
 DROP TABLE IF EXISTS categories;
 CREATE TABLE categories (
 	`id` SERIAL PRIMARY KEY,
 	`catalog_id` bigint unsigned NOT NULL,
 	`name` VARCHAR(255) UNIQUE,
 	`media_id` bigint unsigned NOT NULL,
-  
+	`total` bigint UNSIGNED DEFAULT 0,
 	
 	FOREIGN KEY (`catalog_id`) REFERENCES `catalogs`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 	) COMMENT = 'Разделы каталога';
 	
 INSERT INTO 
-	categories
+	categories (id, catalog_id, name, media_id)
 VALUES 
 	(1, 1, 'Персональные компьютеры', 4),
 	(2, 1, 'Ноутбуки', 5),
@@ -158,6 +159,8 @@ VALUES
 	(16, 6, 'Антивирус Kaspersky Internet Security для Android', 'установка/продление лицензии, смартфон/планшет, количество устройств - 1, 60 мес, карта с кодом', 499, 7, '2021-12-23 13:14:40', '2021-12-23 13:14:40'),
 	(17, 7, 'Процессор Intel Core i5-11400F OEM', 'LGA 1200, 6 x 2.6 ГГц, L2 - 3 МБ, L3 - 12 МБ, 2хDDR4-3200 МГц, TDP 65 Вт', 15399, 4, '2021-12-23 13:14:40', '2021-12-23 13:14:40'), 
 	(18, 7, 'Процессор Intel Core i5-10400F BOX', 'LGA 1200, 6 x 2.9 ГГц, L2 - 1.5 МБ, L3 - 12 МБ, 2хDDR4-2666 МГц, TDP 65 Вт, кулер', 14999, 5, '2021-12-23 13:14:40', '2021-12-23 13:14:40');
+
+UPDATE categories SET total = (SELECT sum(quantity) FROM products WHERE categories.id = products.categories_id);
 
 DROP TABLE IF EXISTS country;
 CREATE TABLE country(
@@ -302,17 +305,19 @@ VALUES
 	(1, 2, now(), now()),
 	(2, 1, now(), now()),
 	(3, 9, now(), now()),
-	(4, 5, now(), now());
+	(4, 5, now(), now()),
+	(5, 3, now(), now()),
+	(6, 4, now(), now());
 
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products (
-  id SERIAL PRIMARY KEY,
-  order_id bigint UNSIGNED,
-  product_id bigint UNSIGNED,
-  total INT UNSIGNED DEFAULT 1,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `order_id` bigint UNSIGNED,
+  `product_id` bigint UNSIGNED,
+  `qty` INT UNSIGNED DEFAULT 1,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   
+  PRIMARY KEY (order_id, product_id),
   FOREIGN KEY (`order_id`) REFERENCES orders(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (`product_id`) REFERENCES products(`id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -320,8 +325,15 @@ CREATE TABLE orders_products (
 INSERT INTO 
 	orders_products
 VALUES 
-	(1, 1, 3, 1, now(), now()),
-	(2, 1, 17, 1, now(),now()),
-	(3, 2, 15, 1, now(), now()),
-	(4, 3, 12, 1, now(), now()),
-	(5, 4, 11, 2, now(), now());
+	(1, 3, 1, now(), now()),
+	(1, 17, 1, now(),now()),
+	(1, 15, 2, now(), now()),
+	(2, 7, 3, now(), now()),
+	(1, 5, 1, now(), now()),
+	(2, 15, 1, now(), now()),
+	(3, 12, 1, now(), now()),
+	(4, 11, 2, now(), now()),
+	(5, 12, 2, now(), now()),
+	(6, 4, 2, now(), now());
+
+
